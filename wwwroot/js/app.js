@@ -112,60 +112,33 @@
 (function () {
     angular
         .module('DirectorySearchApplication')
-        .directive('someDirective', [function () {
-            return {
-                restrict: 'A',
-                replace: true,
-                require: '^^parentOfSome',
-                scope: {
-                    someDirective: "@",
-                    text: '@str'
-                },
-                template: '<div class="alert alert-success" role="alert"></div>',
-                link: function (scope, element, attrs, ctrl) {
-
-
-                    element.on('click', function () {
-                        console.log("ctrl", ctrl.jkl);
-                        console.log("scope", scope.jkl);
-
-                        ctrl.hello("guest");
-                    });
-
-
-                }
-            };
-        }]);
-
-
-    angular
-        .module('DirectorySearchApplication')
-        .directive('parentOfSome', [function () {
+        .directive('artistCard', [function () {
             return {
                 restrict: 'E',
                 replace: true,
                 scope: {
-                    jkl: "=jkl"
+                    artists: '=',
+                    artist: '='
                 },
-                template: '<div> {{ jkl }} {{ ctrl.jkl }} <div some-directive="hi" str="8 * 2" this-is-an-attribute="aaa"></div> </div>',
-                controllerAs: 'ctrl',
-                controller: function ($scope) {
-                    var vm = this;
+                template: '<a href="#detail/{{artists.indexOf(artist)}}"><div><img src="../images/{{artist.shortname}}_tn.jpg"></div><div id="resultName"><p>{{artist.name}}</p><p>{{artist.reknown}}</p></div></a>',
+            };
+        }]);
+})();
 
-
-                    // console.log("scope", $scope.jkl);
-
-
-                    vm.jkl = "THIS";
-
-                    // console.log("this", vm.jkl);
-
-                    vm.hello = function(name) {
-                        console.log("HELLO  HELLO ", name);
-                    }
-
-
-                }
+(function () {
+    angular
+        .module('DirectorySearchApplication')
+        .directive('artistSearchList', [function () {
+            return {
+                restrict: 'E',
+                replace: true,
+                scope: {
+                    artists: '=',
+                    search: '=',
+                    searchBy: '=',
+                    direction: '='
+                },
+                template: '<div ng-show="search" class="result" ng-repeat="artist in artists | filter : {name : search} | orderBy : searchBy:direction"><artist-card artists="artists" artist="artist"></artist-card></div>',
             };
         }]);
 })();
